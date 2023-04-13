@@ -1,0 +1,53 @@
+{
+
+  "name": "mytodo",
+  "displayName": "mytodo",
+
+  "expo": {
+    "name": "mytodo",
+    "slug": "mytodo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "enabled": true
+    },
+    "android": {
+      "package": "com.myawesomeapp",
+      "versionCode": 1
+    },
+    "ios": {
+      "bundleIdentifier": "com.myawesomeapp",
+      "buildNumber": "1.0.0"
+    },
+    "typescript": {
+      "extends": "expo/tsconfig.base",
+      "include": [
+        "./src/**/*"
+      ],
+      "compilerOptions": {
+        "jsx": "react",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "esnext",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "resolveJsonModule": true
+      }
+    }
+  }
+}

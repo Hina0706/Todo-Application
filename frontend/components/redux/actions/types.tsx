@@ -1,0 +1,3 @@
+export const UPDATE_USER_NAME = 'UPDATE_USER_NAME';
+export const UPDATE_USER_IMG = 'UPDATE_USER_IMG';
+export const ADD_PROFILE = 'ADD_PROFILE';
