@@ -64,26 +64,26 @@ export default function LogIn({navigation}) {
 const styles = StyleSheet.create({
   textInput: {
     borderColor: 'lightgrey',
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     borderStyle: 'solid',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    marginTop: 10,
+    marginTop: 30,
+    fontSize: 25,
   },
   signInBottom: {
     marginTop: 80,
-    borderColor: 'lightgrey',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    width: '100%',
+    height: 35,
+    borderRadius: 5,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#2E8B57',
   },
   signInText: {
     color: 'white',
+    fontSize: 20,
     fontWeight: 'bold',
-    fontSize: 16,
   },
   bottomButton: {
     backgroundColor: 'ghostwhite',
@@ -95,6 +95,6 @@ const styles = StyleSheet.create({
   },
   buttomText: {
     fontWeight: 'bold',
-    color: 'red',
+    color: '#CD0000',
   },
 });

@@ -34,22 +34,25 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 40,
     marginBottom: 100,
-    color: 'darkslategrey',
+    color: '#838B83',
     textAlign: 'center',
   },
   providerButton: {
     borderColor: 'lightgrey',
-    borderWidth: 1,
+    borderWidth: 2,
     borderStyle: 'solid',
     padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
+    height: 50,
   },
   providerButtonText: {
     paddingRight: 20,
+    fontSize: 20,
+    color: '#838B8B',
+    fontWeight: 'bold',
   },
   bottomButton: {
     backgroundColor: 'ghostwhite',
@@ -61,6 +64,6 @@ const styles = StyleSheet.create({
   },
   buttomText: {
     fontWeight: 'bold',
-    color: 'red',
+    color: '#CD0000',
   },
 });
