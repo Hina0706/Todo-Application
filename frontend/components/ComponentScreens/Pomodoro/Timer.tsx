@@ -10,7 +10,7 @@ type Props = {
   timerMode: 'Focus' | 'Break';
 };
 
-export const TimerCountDown: React.FC<Props> = ({ timerDate }) => {
+export const TimerCountDown: React.FC<Props> = ({timerDate}) => {
   return (
     <View>
       <Text style={styles.TimerCountDownText}>
@@ -28,7 +28,7 @@ export const TimerToggle: React.FC<Props> = ({
 }) => {
   return (
     <View>
-      <TouchableOpacity onPress={isTimeRunning ? StopTimer : StartTimer}>
+      <TouchableOpacity onPress={isTimeRunning ? StopTimer : StartTimer} >
         <Text style={styles.button}>
           {isTimeRunning ? 'Stop Timer' : 'Start Timer'}
         </Text>
@@ -41,7 +41,7 @@ export const TimerMode: React.FC<Props> = ({timerMode}) => {
   return (
     <View>
       <Text style={styles.text}>
-        {timerMode} Time {timerMode === 'Focus' ? '🍅' : '🥦'}
+        {timerMode} Time {timerMode === 'Focus' ? '❗️' : '🙆🏼'}
       </Text>
     </View>
   );
@@ -51,20 +51,27 @@ const styles = StyleSheet.create({
   TimerCountDownText: {
     fontSize: 40,
     fontWeight: '800',
-    color: '#fff',
+    color: '#8B814C',
+    marginBottom: 20,
+    marginTop: 20,
+    opacity: 0.7,
   },
   button: {
-    fontSize: 20,
-    fontWeight: '500',
-    color: 'blue',
-    textDecorationLine: 'underline',
+    fontSize: 30,
+    fontWeight: '600',
+    color: '#8B814C',
+    opacity: 0.7,
   },
+
   text: {
-    fontSize: 20,
+    fontSize: 40,
     fontWeight: 'bold',
     marginBottom: 20,
+    opacity: 0.5,
   },
   TimerCountDownContainer: {
     alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 20,
   },
 });

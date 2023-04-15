@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View, Slider} from 'react-native';
+import {StyleSheet, View, Slider} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   TimerCountDown,
@@ -46,11 +46,11 @@ export default function Pomodoro() {
     <View
       style={{
         ...styles.container,
-        ...{backgroundColor: timerMode === 'Break' ? '#2a9d8f' : '#d95558'},
+        ...{backgroundColor: timerMode === 'Break' ? '#E0EEE0' : '#FFE4E1'},
       }}>
       <TimerMode timerMode={timerMode} />
       <Slider
-        style={{width: 300, height: 40}}
+        style={{width: 300, height: 40, opacity: 0.7}}
         minimumValue={0 * 60 * 1000}
         maximumValue={60 * 60 * 1000}
         minimumTrackTintColor="#FFFFFF"

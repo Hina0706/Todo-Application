@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 export default function ProfileScreen({navigation}) {
   const dispatch = useDispatch();
   return (
-    <View style={{width: '100%', height: '100%'}}>
+    <View style={{width: '100%', height: '100%', backgroundColor: '#E0EEE0'}}>
       <View style={{width: '100%', padding: 10}}>
         <ProfileBody />
         <TouchableOpacity
@@ -30,11 +30,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 35,
     borderRadius: 5,
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
     marginTop: 30,
+    backgroundColor: '#2E8B57',
   },
   text: {
     fontSize: 20,

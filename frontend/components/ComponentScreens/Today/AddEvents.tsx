@@ -33,7 +33,7 @@ const TextInputField = ({label, value, onChange}) => {
 const CollapseField = ({headerLeft, headerRight, body}) => {
   return (
     <Collapse>
-      <CollapseHeader>
+      <CollapseHeader style={styles.collapseContainer}>
         <Text style={styles.textLeft}>
           {headerLeft}
           <Text style={styles.textRight}>{headerRight}</Text>
@@ -71,7 +71,7 @@ export default function AddEvents({
   }, []);
 
   const prioritySelection = () => {
-    const priorities = ['None', 'High', 'Medium', 'Low'];
+    const priorities = ['High', 'Medium', 'Low'];
     const handlePrioritySelection = priority => {
       handleSelectOption('priority', priority);
     };
@@ -79,9 +79,10 @@ export default function AddEvents({
       <View style={styles.choiceContainer}>
         {priorities.map((priority, index) => (
           <TouchableOpacity
+            style={styles.priorityButton}
             key={index}
             onPress={() => handlePrioritySelection(priority)}>
-            <Text style={styles.textInput}>{priority}</Text>
+            <Text style={styles.priorityText}>{priority}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -135,6 +136,8 @@ export default function AddEvents({
                 handleInputChange('selectedStartTime', value)
               }
               mode="datetime"
+              style={styles.timerContainer}
+              minimumDate={new Date()}
             />
           }
         />
@@ -148,6 +151,8 @@ export default function AddEvents({
                 handleInputChange('selectedEndTime', value)
               }
               mode="datetime"
+              style={styles.timerContainer}
+              minimumDate={selectedStartTime}
             />
           }
         />
@@ -168,17 +173,15 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'white',
-    marginBottom: 50,
+    backgroundColor: '#E0EEE0',
   },
   saveButtomContainer: {
     width: '100%',
     height: 35,
     borderRadius: 5,
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#2E8B57',
   },
   saveText: {
     color: 'white',
@@ -186,32 +189,48 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   textInput: {
-    fontSize: 20,
+    fontSize: 30,
     borderBottomWidth: 1,
     borderColor: '#CDCDCD',
     marginBottom: 30,
+    marginTop: 30,
   },
   sectionContainer: {
     paddingVertical: 10,
   },
   textLeft: {
-    opacity: 0.5,
-    color: 'black',
+    color: '#2F4F4F',
     fontWeight: 'bold',
     fontSize: 20,
     flex: 1,
+    marginRight: 'auto',
   },
   textRight: {
     opacity: 0.5,
-    color: 'black',
+    color: '#556B2F',
     fontWeight: 'bold',
     fontSize: 20,
-    flex: 1,
-    alignItems: 'flex-end',
   },
   choiceContainer: {
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
+  },
+  priorityText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  priorityButton: {
+    width: '100%',
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F0FFF0',
+  },
+  collapseContainer: {
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignContent: 'space-around',
+  },
+  timerContainer: {
+    backgroundColor: '#F0FFF0',
   },
 });

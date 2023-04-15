@@ -41,29 +41,61 @@ const TodoItem = ({
       });
     }
   };
+  let titleTextStyle = styles.titleText;
+  let timerTextStyle = styles.timeText;
+  let categoryTextStyle = styles.categoryText;
+  switch (priority) {
+    case 'High':
+      titleTextStyle = { ...styles.titleText, color: completed ? '#CDC0B0':'#A52A2A', textDecorationLine: completed ? 'line-through': null};
+      timerTextStyle = {...styles.timeText, color: completed ? '#CDC0B0':'#A52A2A'};
+      categoryTextStyle = { ...styles.categoryText, color: completed ? '#CDC0B0' : '#A52A2A' };
+      break;
+    case 'Medium':
+      titleTextStyle = {...styles.titleText, color: completed ? '#CDC0B0':'#FFA54F', textDecorationLine: completed ? 'line-through': null};
+      timerTextStyle = {...styles.timeText, color: completed ? '#CDC0B0':'#FFA54F'};
+      categoryTextStyle = { ...styles.categoryText, color: completed ? '#CDC0B0' : '#FFA54F' };
+      break;
+    case 'Low':
+      titleTextStyle = {...styles.titleText, color: completed ? '#CDC0B0':'#CDC5BF', textDecorationLine: completed ? 'line-through': null};
+      timerTextStyle = {...styles.timeText, color: completed ? '#CDC0B0':'#CDC5BF'};
+      categoryTextStyle = { ...styles.categoryText, color: completed ? '#CDC0B0' : '#CDC5BF' };
+      break;
+  };
+
   return (
-    <View style={{backgroundColor: completed ? 'blue' : 'red'}}>
+    <View style={{backgroundColor: completed ? '#EEE9E9' : '#FFE4E1'}}>
       <Swipeable
         leftButtons={leftButtons}
         rightButtons={rightButtons}
         onLeftActionRelease={toggleCompleted}
         onRightActionRelease={deleteEvent}>
-        <TouchableOpacity style={styles.text} onPress={handleEdit}>
-          <Text>{title}</Text>
-          <Text>{category}</Text>
-          <Text>
-            {selectedStartTime.toLocaleString()} -
-            {selectedEndTime.toLocaleString()}
-          </Text>
-          <Text>{priority}</Text>
+        <TouchableOpacity onPress={handleEdit}>
+          <Text style={titleTextStyle}>{title}</Text>
+          <View style={{flexDirection: 'row', alignContent: 'space-around'}}>
+            <Text style={categoryTextStyle}>{category}</Text>
+            <Text style={timerTextStyle}>
+              {selectedStartTime.getHours().toLocaleString()} :{' '}
+              {selectedStartTime.getMinutes().toLocaleString()} -
+              {selectedEndTime.getHours().toLocaleString()} :{' '}
+              {selectedEndTime.getMinutes().toLocaleString()}
+            </Text>
+          </View>
         </TouchableOpacity>
       </Swipeable>
     </View>
   );
 };
 
-const rightButtons = [<TouchableHighlight><Text>Delete</Text></TouchableHighlight>,];
-const leftButtons = [<TouchableHighlight><Text>Completed</Text></TouchableHighlight>,];
+const rightButtons = [
+  <TouchableHighlight>
+    <Text>Delete ❌</Text>
+  </TouchableHighlight>,
+];
+const leftButtons = [
+  <TouchableHighlight>
+    <Text>Completed ✅</Text>
+  </TouchableHighlight>,
+];
 
 export default function Today({navigation}) {
   const auth = getAuth();
@@ -118,11 +150,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#E0EEE0',
   },
   text: {
     flex: 1,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  titleText: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    marginTop: 15,
+    color: 'black',
+  },
+  categoryText: {
+    fontSize: 18,
+    marginTop: 5,
+    marginRight: 'auto',
+    fontWeight:'bold',
+  },
+  timeText: {
+    fontSize: 18,
+    marginTop: 5,
+    color: 'black',
+    fontWeight:'bold',
+  },
+  deleteButton: {
+    backgroundColor: 'red',
   },
 });

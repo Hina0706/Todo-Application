@@ -77,7 +77,7 @@ export function EditProfile({navigation}) {
     }
   };
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.avatarContainer}>
         <TouchableOpacity onPress={showActionSheet}>
           <Image
@@ -116,17 +116,20 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'white',
+    backgroundColor: '#E0EEE0',
   },
   textInput: {
     fontSize: 20,
     borderBottomWidth: 1,
     borderColor: '#CDCDCD',
+    marginBottom: 20,
   },
   text: {
-    opacity: 0.5,
-    color: '#3493D9',
+    color: '#2F4F4F',
     fontSize: 16,
+    marginBottom: 15,
+    marginTop: 10,
+    fontWeight: 'bold',
   },
   sectionContainer: {
     paddingVertical: 10,
@@ -144,10 +147,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 35,
     borderRadius: 5,
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
+    backgroundColor: '#2E8B57',
   },
   saveText: {
     color: 'white',
