@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import {View} from 'react-native';
 import AddEvents from './AddEvents';
 
 export default function EditEvents({

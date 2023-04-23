@@ -10,7 +10,6 @@ import {
 
 export function ProfileBody() {
   const auth = getAuth();
-  const currUser = auth.currentUser;
   const dispatch = useDispatch();
   const userName = useSelector(selectUserName);
   const userImg = useSelector(selectUserImg);
@@ -29,7 +28,7 @@ export function ProfileBody() {
   return (
     <View>
       <View style={styles.profileImageContainer}>
-        <Image source={userImg} style={styles.profileImage} />
+        <Image source={{uri: userImg}} style={styles.profileImage} />
       </View>
       <View style={styles.accountNameContainer}>
         <Text style={styles.accountNameText}>{userName}</Text>
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    // paddingVertical: 20,
+    paddingVertical: 20,
   },
   introContainer: {
     flexDirection: 'row',
@@ -103,7 +102,3 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
 });
-
-
-// const userName = currUser ? currUser.displayName : null;
-// const userImg = currUser ? currUser.photoURL : null;

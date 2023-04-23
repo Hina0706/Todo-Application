@@ -9,7 +9,7 @@ import React, {useState} from 'react';
 import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
 import {useDispatch} from 'react-redux';
 import {setUserAuth} from '../../redux/actions/userSlice';
-import {initializeProfile} from '../../../../backend/database/userDB';
+import {initializeTodoDB} from '../../../../backend/database/todoDB';
 
 export default function Register({navigation}) {
   const [email, setEmail] = useState('');
@@ -21,8 +21,8 @@ export default function Register({navigation}) {
       .then(userCredential => {
         const user = userCredential.user;
         console.log('Registered with', user.email);
+        initializeTodoDB();
         dispatch(setUserAuth());
-        initializeProfile();
       })
       .catch(error => {
         const errorCode = error.code;
@@ -61,7 +61,7 @@ export default function Register({navigation}) {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   textInput: {
@@ -100,4 +100,3 @@ const styles = StyleSheet.create({
     color: '#CD0000',
   },
 });
-

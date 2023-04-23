@@ -8,7 +8,7 @@ const todoSlice = createSlice({
   reducers: {
     addTodo: (state, action) => {
       const newTodo = {
-        id: Date.now(),
+        id: action.payload.id,
         todo: action.payload.todo,
         completed: false,
         category: action.payload.category,
@@ -26,10 +26,13 @@ const todoSlice = createSlice({
     deleteTodo: (state, action) => {
       return state.filter(todo => todo.id !== action.payload.id);
     },
-    selectTodo: () => {
+    getCategoriesRD: state => {
+      const categories = state.map(todo => todo.category);
+      return [...new Set(categories)];
     },
   },
 });
 
-export const {addTodo, toggleComplete, deleteTodo} = todoSlice.actions;
+export const {addTodo, toggleComplete, deleteTodo, getCategoriesRD} =
+  todoSlice.actions;
 export default todoSlice.reducer;

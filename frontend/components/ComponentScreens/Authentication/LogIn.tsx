@@ -30,8 +30,8 @@ export default function LogIn({navigation}) {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <View style={{flex: 1}}>
+    <View style={styles.container}>
+      <View style={styles.container}>
         <TextInput
           value={email}
           onChangeText={text => setEmail(text)}
@@ -59,7 +59,7 @@ export default function LogIn({navigation}) {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   textInput: {
@@ -96,5 +96,8 @@ const styles = StyleSheet.create({
   buttomText: {
     fontWeight: 'bold',
     color: '#CD0000',
+  },
+  container: {
+    flex: 1,
   },
 });

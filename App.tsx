@@ -7,9 +7,9 @@
 import React, {useMemo} from 'react';
 import SimpleBottomNavigation from './frontend/components/MainScreens/BottomNavigation';
 import {initializeApp} from 'firebase/app';
-import {getAnalytics} from 'firebase/analytics';
+//import {getAnalytics} from 'firebase/analytics';
 import {FirstPage} from './frontend/components/MainScreens/FirstPage';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LogIn from './frontend/components/ComponentScreens/Authentication/LogIn';
 import Register from './frontend/components/ComponentScreens/Authentication/Register';
@@ -18,6 +18,7 @@ import {Provider, useSelector} from 'react-redux';
 import {selectAuth} from './frontend/components/redux/actions/userSlice';
 import {userStore} from './my-app/src/app/store';
 import {getFirestore} from 'firebase/firestore';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -39,7 +40,7 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const userDatabase = getFirestore(app);
-const analytics = getAnalytics(app);
+//const analytics = getAnalytics(app);
 const LogInStack = createNativeStackNavigator();
 
 function LogInNavigation() {
@@ -60,8 +61,35 @@ function LogInNavigation() {
 
 function MainPage() {
   const userAuth = useSelector(useMemo(() => selectAuth, []));
+  // if (userAuth) {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
+  //   const dispatch = useDispatch();
+  //   const eventsDoc = await getDoc(doc(userDatabase, 'events', user.uid));
+  //   const events = eventsDoc.data();
+  //   dispatch(
+  //     setActiveUser({
+  //       userName: user.displayName,
+  //       userImg: user.photoURL,
+  //     }),
+  //   );
+  //   Object.entries(events).forEach(([key, value]) => {
+  //     dispatch(
+  //       addTodo({
+  //         id: value[0],
+  //         todo: value[5],
+  //         completed: value[6],
+  //         category: value[1],
+  //         selectedStartTime: value[3],
+  //         selectedEndTime: value[4],
+  //         priority: value[2],
+  //         user: user.uid,
+  //       }),
+  //     );
+  //   });
+  // }
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.container}>
       {userAuth ? <SimpleBottomNavigation /> : <LogInNavigation />}
     </View>
   );
@@ -74,3 +102,9 @@ export default function App() {
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

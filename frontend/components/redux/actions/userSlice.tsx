@@ -4,7 +4,7 @@ const initialState = {
   userEmail: null,
   userAuth: false,
   userName: null,
-  userImg: '../../Assets/EmptyIcon.png',
+  userImg: null,
   userId: null,
 };
 
@@ -13,10 +13,10 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setActiveUser: (state, action) => {
-      state.userEmail = action.payload.userEmail;
+      //state.userEmail = action.payload.userEmail;
       state.userName = action.payload.userName;
       state.userImg = action.payload.userImg;
-      state.userId = action.payload.userId;
+      //state.userId = action.payload.userId;
     },
     setUserLogOut: state => {
       state.userEmail = null;
