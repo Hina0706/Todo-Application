@@ -17,7 +17,7 @@ import {
 } from '../../../backend/database/todoDB';
 
 // single todo item
-const TodoItem = ({
+export const TodoItem = ({
   id,
   title,
   completed,
@@ -35,7 +35,6 @@ const TodoItem = ({
 
   const deleteEvent = useCallback(() => {
     deleteTodoDB(id).then(() => {
-      //console.log(id);
       dispatch(deleteTodo({id: id}));
     });
   }, [id, dispatch]);
@@ -109,7 +108,6 @@ const TodoItem = ({
         rightButtons={rightButtons}
         onLeftActionRelease={toggleCompleted}
         onRightActionRelease={deleteEvent}>
-        {/* <TouchableOpacity onPress={handleEdit}> */}
         <Text style={titleTextStyle}>{title}</Text>
         <View style={{flexDirection: 'row', alignContent: 'space-around'}}>
           <Text style={categoryTextStyle}>{category}</Text>
@@ -120,7 +118,6 @@ const TodoItem = ({
             {selectedEndTime.getMinutes().toLocaleString()}
           </Text>
         </View>
-        {/* </TouchableOpacity> */}
       </Swipeable>
     </View>
   );
@@ -139,11 +136,11 @@ const leftButtons = [
 
 const today = new Date();
 // render the screen
-export default function Today({}) {
+export default function Today() {
   const auth = getAuth();
   const currUser = auth.currentUser;
-  const todos = useSelector(state =>
-    state.todos.filter(todo => {
+  const todos = useSelector(() =>
+    todos.filter(todo => {
       const todoStartTime = todo && new Date(todo.selectedStartTime);
       return (
         todo &&

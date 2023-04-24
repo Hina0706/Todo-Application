@@ -1,13 +1,12 @@
 import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Button, StyleSheet} from 'react-native';
+import {Button} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Today from './Today';
 import Pomodoro from './Pomodoro';
 import ProfileScreen from './Profile';
 import {EditProfile} from '../ComponentScreens/Profile/EditProfile';
 import AddEvents from '../ComponentScreens/Today/AddEvents';
-import EditEvents from '../ComponentScreens/Today/EditEvents';
 import {NavigationContainer} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
@@ -29,7 +28,6 @@ function TodayNavigation() {
         })}
       />
       <TodayStack.Screen name="AddEvents" component={AddEvents} />
-      <TodayStack.Screen name="EditEvents" component={EditEvents} />
     </TodayStack.Navigator>
   );
 }
