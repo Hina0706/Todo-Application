@@ -7,7 +7,6 @@
 import React, {useMemo} from 'react';
 import SimpleBottomNavigation from './frontend/components/MainScreens/BottomNavigation';
 import {initializeApp} from 'firebase/app';
-//import {getAnalytics} from 'firebase/analytics';
 import {FirstPage} from './frontend/components/MainScreens/FirstPage';
 import {View, StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -61,33 +60,6 @@ function LogInNavigation() {
 
 function MainPage() {
   const userAuth = useSelector(useMemo(() => selectAuth, []));
-  // if (userAuth) {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-  //   const dispatch = useDispatch();
-  //   const eventsDoc = await getDoc(doc(userDatabase, 'events', user.uid));
-  //   const events = eventsDoc.data();
-  //   dispatch(
-  //     setActiveUser({
-  //       userName: user.displayName,
-  //       userImg: user.photoURL,
-  //     }),
-  //   );
-  //   Object.entries(events).forEach(([key, value]) => {
-  //     dispatch(
-  //       addTodo({
-  //         id: value[0],
-  //         todo: value[5],
-  //         completed: value[6],
-  //         category: value[1],
-  //         selectedStartTime: value[3],
-  //         selectedEndTime: value[4],
-  //         priority: value[2],
-  //         user: user.uid,
-  //       }),
-  //     );
-  //   });
-  // }
   return (
     <View style={styles.container}>
       {userAuth ? <SimpleBottomNavigation /> : <LogInNavigation />}

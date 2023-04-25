@@ -12,8 +12,8 @@ const todoSlice = createSlice({
         todo: action.payload.todo,
         completed: false,
         category: action.payload.category,
-        selectedStartTime: action.payload.selectedStartTime,
-        selectedEndTime: action.payload.selectedEndTime,
+        selectedStartTime: action.payload.selectedStartTime.getTime(),
+        selectedEndTime: action.payload.selectedEndTime.getTime(),
         priority: action.payload.priority,
         user: action.payload.user,
       };

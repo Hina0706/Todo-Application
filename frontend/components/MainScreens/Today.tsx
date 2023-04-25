@@ -11,10 +11,7 @@ import {toggleComplete, deleteTodo} from '../redux/actions/todoSlice';
 import {useDispatch} from 'react-redux';
 import Swipeable from 'react-native-swipeable';
 import {getAuth} from 'firebase/auth';
-import {
-  deleteTodoDB,
-  toggleCompletedDB,
-} from '../../../backend/database/todoDB';
+import {Event} from '../../../backend/database/todoDB';
 
 // single todo item
 export const TodoItem = ({
@@ -26,18 +23,27 @@ export const TodoItem = ({
   selectedEndTime,
   priority,
 }) => {
+  const newEvent = new Event(
+    category,
+    priority,
+    selectedStartTime,
+    selectedEndTime,
+    title,
+    completed,
+    id,
+  );
   const dispatch = useDispatch();
   const toggleCompleted = useCallback(() => {
-    toggleCompletedDB(id).then(() => {
+    newEvent.toggleCompletedDB(newEvent.eventId).then(() => {
       dispatch(toggleComplete({id: id, completed: !completed}));
     });
-  }, [id, completed, dispatch]);
+  }, [newEvent, dispatch]);
 
   const deleteEvent = useCallback(() => {
-    deleteTodoDB(id).then(() => {
+    newEvent.deleteTodoDB(newEvent.eventId).then(() => {
       dispatch(deleteTodo({id: id}));
     });
-  }, [id, dispatch]);
+  }, [newEvent, dispatch]);
 
   // const handleEdit = () => {
   //   if (navigation) {
@@ -53,50 +59,50 @@ export const TodoItem = ({
   let titleTextStyle = styles.titleText;
   let timerTextStyle = styles.timeText;
   let categoryTextStyle = styles.categoryText;
-  switch (priority) {
+  switch (newEvent.priority) {
     case 'High':
       titleTextStyle = {
         ...styles.titleText,
-        color: completed ? '#CDC0B0' : '#A52A2A',
-        textDecorationLine: completed ? 'line-through' : null,
+        color: newEvent.completed ? '#CDC0B0' : '#A52A2A',
+        textDecorationLine: newEvent.completed ? 'line-through' : null,
       };
       timerTextStyle = {
         ...styles.timeText,
-        color: completed ? '#CDC0B0' : '#A52A2A',
+        color: newEvent.completed ? '#CDC0B0' : '#A52A2A',
       };
       categoryTextStyle = {
         ...styles.categoryText,
-        color: completed ? '#CDC0B0' : '#A52A2A',
+        color: newEvent.completed ? '#CDC0B0' : '#A52A2A',
       };
       break;
     case 'Medium':
       titleTextStyle = {
         ...styles.titleText,
-        color: completed ? '#CDC0B0' : '#FFA54F',
-        textDecorationLine: completed ? 'line-through' : null,
+        color: newEvent.completed ? '#CDC0B0' : '#FFA54F',
+        textDecorationLine: newEvent.completed ? 'line-through' : null,
       };
       timerTextStyle = {
         ...styles.timeText,
-        color: completed ? '#CDC0B0' : '#FFA54F',
+        color: newEvent.completed ? '#CDC0B0' : '#FFA54F',
       };
       categoryTextStyle = {
         ...styles.categoryText,
-        color: completed ? '#CDC0B0' : '#FFA54F',
+        color: newEvent.completed ? '#CDC0B0' : '#FFA54F',
       };
       break;
     case 'Low':
       titleTextStyle = {
         ...styles.titleText,
-        color: completed ? '#CDC0B0' : '#CDC5BF',
-        textDecorationLine: completed ? 'line-through' : null,
+        color: newEvent.completed ? '#CDC0B0' : '#CDC5BF',
+        textDecorationLine: newEvent.completed ? 'line-through' : null,
       };
       timerTextStyle = {
         ...styles.timeText,
-        color: completed ? '#CDC0B0' : '#CDC5BF',
+        color: newEvent.completed ? '#CDC0B0' : '#CDC5BF',
       };
       categoryTextStyle = {
         ...styles.categoryText,
-        color: completed ? '#CDC0B0' : '#CDC5BF',
+        color: newEvent.completed ? '#CDC0B0' : '#CDC5BF',
       };
       break;
   }
@@ -112,10 +118,10 @@ export const TodoItem = ({
         <View style={{flexDirection: 'row', alignContent: 'space-around'}}>
           <Text style={categoryTextStyle}>{category}</Text>
           <Text style={timerTextStyle}>
-            {selectedStartTime.getHours().toLocaleString()} :{' '}
-            {selectedStartTime.getMinutes().toLocaleString()} -
-            {selectedEndTime.getHours().toLocaleString()} :{' '}
-            {selectedEndTime.getMinutes().toLocaleString()}
+            {new Date(selectedStartTime).getHours().toLocaleString()} :{' '}
+            {new Date(selectedStartTime).getMinutes().toLocaleString()} -
+            {new Date(selectedEndTime).getHours().toLocaleString()} :{' '}
+            {new Date(selectedEndTime).getMinutes().toLocaleString()}
           </Text>
         </View>
       </Swipeable>
@@ -139,8 +145,9 @@ const today = new Date();
 export default function Today() {
   const auth = getAuth();
   const currUser = auth.currentUser;
-  const todos = useSelector(() =>
-    todos.filter(todo => {
+  const allTodos = useSelector(state => state.todos || []);
+  const todosToday = useSelector(() =>
+    allTodos.filter(todo => {
       const todoStartTime = todo && new Date(todo.selectedStartTime);
       return (
         todo &&
@@ -151,7 +158,7 @@ export default function Today() {
       );
     }),
   );
-  todos.sort((a, b) => {
+  todosToday.sort((a, b) => {
     if (a.selectedStartTime < b.selectedStartTime) {
       return -1;
     } else if (a.selectedStartTime > b.selectedStartTime) {
@@ -173,7 +180,7 @@ export default function Today() {
         </Text>
       </View>
       <ScrollView>
-        {todos.map(todo => (
+        {todosToday.map(todo => (
           <TodoItem
             //navigation={navigation}
             id={todo.id}
