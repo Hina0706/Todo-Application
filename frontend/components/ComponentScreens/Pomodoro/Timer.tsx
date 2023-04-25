@@ -1,6 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, { useState } from 'react';
-
+import React from 'react';
 
 type Props = {
   timerDate: Date;
@@ -28,7 +27,7 @@ export const TimerToggle: React.FC<Props> = ({
 }) => {
   return (
     <View>
-      <TouchableOpacity onPress={isTimeRunning ? StopTimer : StartTimer} >
+      <TouchableOpacity onPress={isTimeRunning ? StopTimer : StartTimer}>
         <Text style={styles.button}>
           {isTimeRunning ? 'Stop Timer' : 'Start Timer'}
         </Text>
@@ -40,7 +39,7 @@ export const TimerToggle: React.FC<Props> = ({
 export const TimerMode: React.FC<Props> = ({timerMode}) => {
   return (
     <View>
-      <Text style={styles.text}>
+      <Text style={styles.textTimerMode}>
         {timerMode} Time {timerMode === 'Focus' ? '❗️' : '🙆🏼'}
       </Text>
     </View>
@@ -62,11 +61,11 @@ const styles = StyleSheet.create({
     color: '#8B814C',
     opacity: 0.7,
   },
-
-  text: {
+  textTimerMode: {
     fontSize: 40,
     fontWeight: 'bold',
     marginBottom: 20,
+    marginTop: 20,
     opacity: 0.5,
   },
   TimerCountDownContainer: {

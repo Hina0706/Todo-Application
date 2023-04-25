@@ -1,5 +1,5 @@
-import { View } from 'react-native';
-import AddEvents from './AddEvents';
+import {View} from 'react-native';
+import AddEvents from '../ComponentScreens/Today/AddEvents';
 
 export default function EditEvents({
   navigation,

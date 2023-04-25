@@ -10,10 +10,8 @@ import {
 import {getAuth, updateProfile} from 'firebase/auth';
 import {useDispatch} from 'react-redux';
 import {setActiveUser} from '../../redux/actions/userSlice';
-import {launchCamera, launchImageLibrary, ImagePicker} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ActionSheet from 'react-native-actionsheet';
-// import { takeFromCamera, takeFromLibrary } from '../../ss/UploadImg';
-
 export function EditProfile({navigation}) {
   const auth = getAuth();
   const [userName, setUserName] = useState(auth.currentUser?.displayName);
@@ -31,7 +29,6 @@ export function EditProfile({navigation}) {
         photoURL: userImg,
       })
         .then(() => {
-          console.log('updated!');
           dispatch(
             setActiveUser({
               userName: userName,
@@ -48,21 +45,23 @@ export function EditProfile({navigation}) {
     }
   };
   const takeFromCamera = async () => {
-    const img = await ImagePicker.launchCamera({
+    launchCamera({
       mediaType: 'photo',
       cameraType: 'front',
+    }).then(response => {
+      if (!response.didCancel) {
+        setUserImg(response.assets[0].uri);
+      }
     });
-    if (!img.didCancel) {
-      setUserImg(img.uri);
-    }
   };
   const takeFromLibrary = async () => {
-    let img = await ImagePicker.launchImageLibrary({
-      mediaType: ImagePicker.MediaTypeOptions.All,
+    await launchImageLibrary({
+      mediaType: 'photo',
+    }).then(response => {
+      if (!response.didCancel) {
+        setUserImg(response.assets[0].uri);
+      }
     });
-    if (!img.didCancel) {
-      setUserImg(img.uri);
-    }
   };
   const handleButtonPress = index => {
     switch (index) {
@@ -80,10 +79,7 @@ export function EditProfile({navigation}) {
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
         <TouchableOpacity onPress={showActionSheet}>
-          <Image
-            source={userImg ? {uri: userImg} : null}
-            style={styles.avatar}
-          />
+          <Image source={{uri: userImg}} style={styles.avatar} />
           <Text style={styles.text}>Profile Photo</Text>
         </TouchableOpacity>
       </View>
@@ -91,6 +87,7 @@ export function EditProfile({navigation}) {
         <Text style={styles.text}>User Name</Text>
         <TextInput
           placeholder="User Name"
+          defaultValue={userName}
           style={styles.textInput}
           onChangeText={text => {
             setUserName(text);

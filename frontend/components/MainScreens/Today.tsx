@@ -3,18 +3,18 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {toggleComplete, deleteTodo} from '../redux/actions/todoSlice';
 import {useDispatch} from 'react-redux';
 import Swipeable from 'react-native-swipeable';
 import {getAuth} from 'firebase/auth';
+import {Event} from '../../../backend/database/todoDB';
 
-const TodoItem = ({
-  navigation,
+// single todo item
+export const TodoItem = ({
   id,
   title,
   completed,
@@ -23,44 +23,78 @@ const TodoItem = ({
   selectedEndTime,
   priority,
 }) => {
+  const newEvent = new Event(
+    category,
+    priority,
+    selectedStartTime,
+    selectedEndTime,
+    title,
+    completed,
+    id,
+  );
   const dispatch = useDispatch();
-  const toggleCompleted = () => {
-    dispatch(toggleComplete({id: id, completed: !completed}));
-  };
-  const deleteEvent = () => {
-    dispatch(deleteTodo({id: id}));
-  };
-  const handleEdit = () => {
-    if (navigation) {
-      navigation.navigate('EditEvents', {
-        existingTodo: title,
-        existingCategory: category,
-        existingStartTime: selectedStartTime,
-        existingEndTime: selectedEndTime,
-        existingPriority: priority,
-      });
-    }
-  };
+  const toggleCompleted = useCallback(() => {
+    newEvent.toggleCompletedDB(newEvent.eventId).then(() => {
+      dispatch(toggleComplete({id: id, completed: !completed}));
+    });
+  }, [id, completed, dispatch]);
+
+  const deleteEvent = useCallback(() => {
+    newEvent.deleteTodoDB(newEvent.eventId).then(() => {
+      dispatch(deleteTodo({id: id}));
+    });
+  }, [id, newEvent, dispatch]);
+
   let titleTextStyle = styles.titleText;
   let timerTextStyle = styles.timeText;
   let categoryTextStyle = styles.categoryText;
-  switch (priority) {
+  switch (newEvent.priority) {
     case 'High':
-      titleTextStyle = { ...styles.titleText, color: completed ? '#CDC0B0':'#A52A2A', textDecorationLine: completed ? 'line-through': null};
-      timerTextStyle = {...styles.timeText, color: completed ? '#CDC0B0':'#A52A2A'};
-      categoryTextStyle = { ...styles.categoryText, color: completed ? '#CDC0B0' : '#A52A2A' };
+      titleTextStyle = {
+        ...styles.titleText,
+        color: newEvent.completed ? '#CDC0B0' : '#A52A2A',
+        textDecorationLine: newEvent.completed ? 'line-through' : null,
+      };
+      timerTextStyle = {
+        ...styles.timeText,
+        color: newEvent.completed ? '#CDC0B0' : '#A52A2A',
+      };
+      categoryTextStyle = {
+        ...styles.categoryText,
+        color: newEvent.completed ? '#CDC0B0' : '#A52A2A',
+      };
       break;
     case 'Medium':
-      titleTextStyle = {...styles.titleText, color: completed ? '#CDC0B0':'#FFA54F', textDecorationLine: completed ? 'line-through': null};
-      timerTextStyle = {...styles.timeText, color: completed ? '#CDC0B0':'#FFA54F'};
-      categoryTextStyle = { ...styles.categoryText, color: completed ? '#CDC0B0' : '#FFA54F' };
+      titleTextStyle = {
+        ...styles.titleText,
+        color: newEvent.completed ? '#CDC0B0' : '#FFA54F',
+        textDecorationLine: newEvent.completed ? 'line-through' : null,
+      };
+      timerTextStyle = {
+        ...styles.timeText,
+        color: newEvent.completed ? '#CDC0B0' : '#FFA54F',
+      };
+      categoryTextStyle = {
+        ...styles.categoryText,
+        color: newEvent.completed ? '#CDC0B0' : '#FFA54F',
+      };
       break;
     case 'Low':
-      titleTextStyle = {...styles.titleText, color: completed ? '#CDC0B0':'#CDC5BF', textDecorationLine: completed ? 'line-through': null};
-      timerTextStyle = {...styles.timeText, color: completed ? '#CDC0B0':'#CDC5BF'};
-      categoryTextStyle = { ...styles.categoryText, color: completed ? '#CDC0B0' : '#CDC5BF' };
+      titleTextStyle = {
+        ...styles.titleText,
+        color: newEvent.completed ? '#CDC0B0' : '#CDC5BF',
+        textDecorationLine: newEvent.completed ? 'line-through' : null,
+      };
+      timerTextStyle = {
+        ...styles.timeText,
+        color: newEvent.completed ? '#CDC0B0' : '#CDC5BF',
+      };
+      categoryTextStyle = {
+        ...styles.categoryText,
+        color: newEvent.completed ? '#CDC0B0' : '#CDC5BF',
+      };
       break;
-  };
+  }
 
   return (
     <View style={{backgroundColor: completed ? '#EEE9E9' : '#FFE4E1'}}>
@@ -69,18 +103,16 @@ const TodoItem = ({
         rightButtons={rightButtons}
         onLeftActionRelease={toggleCompleted}
         onRightActionRelease={deleteEvent}>
-        <TouchableOpacity onPress={handleEdit}>
-          <Text style={titleTextStyle}>{title}</Text>
-          <View style={{flexDirection: 'row', alignContent: 'space-around'}}>
-            <Text style={categoryTextStyle}>{category}</Text>
-            <Text style={timerTextStyle}>
-              {selectedStartTime.getHours().toLocaleString()} :{' '}
-              {selectedStartTime.getMinutes().toLocaleString()} -
-              {selectedEndTime.getHours().toLocaleString()} :{' '}
-              {selectedEndTime.getMinutes().toLocaleString()}
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <Text style={titleTextStyle}>{title}</Text>
+        <View style={{flexDirection: 'row', alignContent: 'space-around'}}>
+          <Text style={categoryTextStyle}>{category}</Text>
+          <Text style={timerTextStyle}>
+            {new Date(selectedStartTime).getHours().toLocaleString()} :{' '}
+            {new Date(selectedStartTime).getMinutes().toLocaleString()} -
+            {new Date(selectedEndTime).getHours().toLocaleString()} :{' '}
+            {new Date(selectedEndTime).getMinutes().toLocaleString()}
+          </Text>
+        </View>
       </Swipeable>
     </View>
   );
@@ -97,14 +129,17 @@ const leftButtons = [
   </TouchableHighlight>,
 ];
 
-export default function Today({navigation}) {
+const today = new Date();
+// render the screen
+export default function Today() {
   const auth = getAuth();
   const currUser = auth.currentUser;
-  const todos = useSelector(state =>
-    state.todos.filter(todo => {
-      const todoStartTime = new Date(todo.selectedStartTime);
-      const today = new Date();
+  const allTodos = useSelector(state => state.todos || []);
+  const todosToday = useSelector(() =>
+    allTodos.filter(todo => {
+      const todoStartTime = todo && new Date(todo.selectedStartTime);
       return (
+        todo &&
         todo.user === currUser.uid &&
         todoStartTime.getDate() === today.getDate() &&
         todoStartTime.getMonth() === today.getMonth() &&
@@ -112,7 +147,7 @@ export default function Today({navigation}) {
       );
     }),
   );
-  todos.sort((a, b) => {
+  todosToday.sort((a, b) => {
     if (a.selectedStartTime < b.selectedStartTime) {
       return -1;
     } else if (a.selectedStartTime > b.selectedStartTime) {
@@ -128,10 +163,15 @@ export default function Today({navigation}) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.dateContainer}>
+        <Text style={styles.dateText}>
+          {today.getMonth() + 1}-{today.getDate()}-{today.getFullYear()}
+        </Text>
+      </View>
       <ScrollView>
-        {todos.map(todo => (
+        {todosToday.map(todo => (
           <TodoItem
-            navigation={navigation}
+            //navigation={navigation}
             id={todo.id}
             title={todo.todo}
             completed={todo.completed}
@@ -150,7 +190,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#E0EEE0',
   },
   text: {
     flex: 1,
@@ -163,20 +202,34 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 15,
     color: 'black',
+    textDecorationLine: null,
   },
   categoryText: {
     fontSize: 18,
     marginTop: 5,
     marginRight: 'auto',
-    fontWeight:'bold',
+    fontWeight: 'bold',
+    color: 'black',
   },
   timeText: {
     fontSize: 18,
     marginTop: 5,
     color: 'black',
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   deleteButton: {
     backgroundColor: 'red',
+  },
+  dateContainer: {
+    backgroundColor: '#FFFAFA',
+    height: 60,
+    width: '100%',
+  },
+  dateText: {
+    marginTop: 10,
+    fontSize: 30,
+    color: '#8B814C',
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
 });

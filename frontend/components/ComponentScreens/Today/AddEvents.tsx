@@ -7,14 +7,13 @@ import {
   TouchableOpacity,
   ScrollView,
   DatePickerIOS,
-  Button,
 } from 'react-native';
 import {
   Collapse,
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-import {addTodoDB} from '../../../../backend/database/todoDB';
+import {Event} from '../../../../backend/database/todoDB';
 import {addTodo} from '../../redux/actions/todoSlice';
 import {useDispatch} from 'react-redux';
 import {getAuth} from 'firebase/auth';
@@ -72,17 +71,17 @@ export default function AddEvents({
 
   const prioritySelection = () => {
     const priorities = ['High', 'Medium', 'Low'];
-    const handlePrioritySelection = priority => {
-      handleSelectOption('priority', priority);
+    const handlePrioritySelection = pri => {
+      handleSelectOption('priority', pri);
     };
     return (
       <View style={styles.choiceContainer}>
-        {priorities.map((priority, index) => (
+        {priorities.map((pri, index) => (
           <TouchableOpacity
             style={styles.priorityButton}
             key={index}
-            onPress={() => handlePrioritySelection(priority)}>
-            <Text style={styles.priorityText}>{priority}</Text>
+            onPress={() => handlePrioritySelection(pri)}>
+            <Text style={styles.priorityText}>{pri}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -91,16 +90,18 @@ export default function AddEvents({
 
   const handleSave = useCallback(() => {
     const currUser = getAuth().currentUser;
-    addTodoDB(
+    const newEvent = new Event(
       form.category,
       form.priority,
       form.selectedStartTime,
       form.selectedEndTime,
       form.todo,
-    ).then(() => {
-      console.log('updated!');
+      false,
+    );
+    newEvent.addTodoDB().then(id => {
       dispatch(
         addTodo({
+          id: id,
           todo: form.todo,
           category: form.category,
           selectedStartTime: form.selectedStartTime,
@@ -111,7 +112,7 @@ export default function AddEvents({
       );
     });
     navigation.goBack();
-  }, [form, navigation]);
+  }, [form, navigation, dispatch]);
 
   return (
     <ScrollView style={styles.container}>

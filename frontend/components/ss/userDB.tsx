@@ -1,5 +1,5 @@
 import {addDoc, collection} from 'firebase/firestore';
-import {userDatabase} from '../../App';
+import {userDatabase} from '../../../App';
 import {getAuth} from 'firebase/auth';
 
 export async function initializeProfile() {
