@@ -52,7 +52,7 @@ export default function SimpleBottomNavigation() {
             headerShown: false,
           }}
         />
-        <Tab.Screen name="Pomodoto" component={Pomodoro} />
+        <Tab.Screen name="Pomodoro" component={Pomodoro} />
         <Tab.Screen
           name="Me"
           component={ProfileNavigation}

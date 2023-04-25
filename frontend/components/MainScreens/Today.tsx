@@ -37,25 +37,14 @@ export const TodoItem = ({
     newEvent.toggleCompletedDB(newEvent.eventId).then(() => {
       dispatch(toggleComplete({id: id, completed: !completed}));
     });
-  }, [newEvent, dispatch]);
+  }, [id, completed, dispatch]);
 
   const deleteEvent = useCallback(() => {
     newEvent.deleteTodoDB(newEvent.eventId).then(() => {
       dispatch(deleteTodo({id: id}));
     });
-  }, [newEvent, dispatch]);
+  }, [id, newEvent, dispatch]);
 
-  // const handleEdit = () => {
-  //   if (navigation) {
-  //     navigation.navigate('EditEvents', {
-  //       existingTodo: title,
-  //       existingCategory: category,
-  //       existingStartTime: selectedStartTime,
-  //       existingEndTime: selectedEndTime,
-  //       existingPriority: priority,
-  //     });
-  //   }
-  // };
   let titleTextStyle = styles.titleText;
   let timerTextStyle = styles.timeText;
   let categoryTextStyle = styles.categoryText;
@@ -176,7 +165,7 @@ export default function Today() {
     <View style={styles.container}>
       <View style={styles.dateContainer}>
         <Text style={styles.dateText}>
-          {today.getMonth()}-{today.getDate()}-{today.getFullYear()}
+          {today.getMonth() + 1}-{today.getDate()}-{today.getFullYear()}
         </Text>
       </View>
       <ScrollView>
